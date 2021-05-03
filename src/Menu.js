@@ -10,32 +10,24 @@ WebFont.load({
   }
 });
 
-export default class Menu extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      hearts: 0,
-      gems: 0,
-      usd: 0.00,
-      display: props.display
-    }
-  }
-  render(){
-    return(
-      <div id="menu">
-        <div id="currency">
-          <p>{this.state.hearts} <AiFillHeart/></p>
-          <p>{this.state.gems} <BsFillDiamondFill/></p>
-          <p><IoLogoUsd/>{this.state.usd}</p>
-        </div>
-        <h1>Trivia Beat</h1>
-        <button value="test">Play</button>
-        <button value="test">Contribute</button>
-        <button value="test">Leaderboard</button>
-        <button value="test">Store</button>
-        <button value="test">Account</button>
-      </div>
-    );
+export default function Menu({setDisplay}){
 
-  }
+
+  return(
+    <div id="menu">
+      <div id="currency">
+        <p>{0} <AiFillHeart/></p>
+        <p>{0} <BsFillDiamondFill/></p>
+        <p><IoLogoUsd/>{0}</p>
+      </div>
+      <h1>Trivia Beat</h1>
+      <button onClick={() => setDisplay(1)}>Play</button>
+      <button onClick={() => setDisplay(2)}>Contribute</button>
+      <button onClick={() => setDisplay(3)}>Leaderboard</button>
+      <button onClick={() => setDisplay(4)}>Store</button>
+      <button onClick={() => setDisplay(5)}>Account</button>
+    </div>
+  );
+
+
 }
