@@ -1,50 +1,96 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import './contribute.css';
 import { RiArrowGoBackFill } from "@react-icons/all-files/ri/RiArrowGoBackFill";
 import { FaCheck } from "@react-icons/all-files/fa/FaCheck";
 import { FaTimes } from "@react-icons/all-files/fa/FaTimes";
+import $ from 'jquery'
 //import { AiFillStar } from "@react-icons/all-files/ai/AiFillStar";
+
+function Verify({items, isLoaded}){
+    //const [index, setIndex] = useState(0);
+    if(isLoaded){
+      if(items.length > 0){
+        return(
+          <div id="verify">
+            {items.map((question, index) =>(
+              <div id="question" class={index}>
+                <div class="title">
+                  {question.title}
+                </div>
+                {question.options.map((option)=>(
+                  <div class="option">
+                    <div class="list">
+
+                      {
+                        // eslint-disable-next-line
+                        (option == question.options[question.answer] && <FaCheck/>) || <FaTimes/>
+                      }
+                    </div>
+                    <div class="content">{option}</div>
+                  </div>
+                ))}
+                <div class="choice">
+                  <div class="a" onClick={() => $("." + index).css("display", 'none') }>
+                    <FaCheck/>
+                  </div>
+                  <div class="b">
+                    <FaTimes/>
+                  </div>
+                </div>
+              </div>
+
+            ))}
+            </div>
+        )
+      }
+      else return(
+        <div id="verify">
+          <h2>No questions to verify.</h2>
+          </div>
+      )
+    }
+
+}
+
+
 export default function Contribute({setDisplay}){
+  const [mode, setMode] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [items, setItems] = useState([]);
+  const amount = 5;
+  useEffect(()=>{
+    $.ajax({
+          url: "http://localhost:8080/uq",
+          type: "PUT",
+          timeout: 10000,
+          headers: {
+            userid: 1,
+            amount: amount
+          }
+        })
+          .done(function (res) {
+            if (res) {
+              setIsLoaded(true);
+              setItems(res);
+            }
+          })
+          .fail(function (res) {
+            console.log(res);
+          });
+  }, [])
+
+
+
 
   return(
     <div>
       <div id="header">
-        <button>Add</button>
-        <button>Verify</button>
+        <button onClick={() => setMode(1)}>Add</button>
+        <button onClick={() => setMode(0)}>Verify</button>
         <button id="back" onClick={() => setDisplay(0)}><RiArrowGoBackFill /></button>
       </div>
-      <div id="verify">
-        <div id="question">
-          <div class="title">
-            What is the time and what is the meaning of life with the big pie in the sky?
-          </div>
-          <div class="option">
-            <div class="list"><FaTimes/></div>
-            <div class="content">A</div>
-          </div>
-          <div class="option">
-            <div class="list"><FaTimes/></div>
-            <div class="content">A</div>
-          </div>
-          <div class="option">
-            <div class="list"><FaCheck/></div>
-            <div class="content">A</div>
-          </div>
-          <div class="option">
-            <div class="list"><FaTimes/></div>
-            <div class="content">A</div>
-          </div>
-          <div class="choice">
-            <div class="a">
-              <FaCheck/>
-            </div>
-            <div class="b">
-              <FaTimes/>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      {mode === 0 && Verify({items, isLoaded})}
+      {mode === 1 && <h1>Adding questions</h1>}
 
     </div>
   );
