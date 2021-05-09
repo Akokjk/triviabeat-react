@@ -60,7 +60,7 @@ export default function Contribute({setDisplay}){
   const amount = 5;
   useEffect(()=>{
     $.ajax({
-          url: "http://localhost:8080/uq",
+          url: "http://triviabeat.dev/uq",
           type: "PUT",
           timeout: 10000,
           headers: {
