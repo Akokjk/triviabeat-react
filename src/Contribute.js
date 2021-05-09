@@ -60,7 +60,7 @@ export default function Contribute({setDisplay}){
   const amount = 5;
   useEffect(()=>{
     $.ajax({
-          url: "https://triviabeat.dev/uq",
+          url: "https://triviabeat.dev/uq", //must be https or else it will do GET only!
           type: "PUT",
           timeout: 10000,
           headers: {
